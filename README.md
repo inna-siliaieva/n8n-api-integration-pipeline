@@ -21,6 +21,49 @@ The workflow includes:
 - Handling API errors with a fallback branch
 - Finalizing the pipeline with a summary request
 
+## Workflow Screenshots
+
+### 1. Complete Workflow Overview
+
+The complete n8n workflow combines API requests, pagination, data enrichment, conditional routing, batch processing, retry logic, and error handling.
+
+![Workflow Overview](screenshots/01-workflow-overview.png)
+
+### 2. Pagination Configuration
+
+The Orders API uses pagination to retrieve all available records automatically.
+
+The HTTP Request node updates the `page` query parameter for every request using:
+
+```text
+{{ $pageCount + 1 }}
+```
+
+Pagination stops when the API response is empty.
+
+## 3. Retry Logic and Error Handling
+
+The customer API request is configured with automatic retry logic:
+
+- Maximum retries: 3
+- Wait between retries: 1000 ms
+- On Error: Continue using error output
+
+If the API request still fails, the workflow can continue through the fallback branch instead of stopping completely.
+
+## 4. Successful Pipeline Finalization
+
+The final pipeline execution successfully verified:
+- HTTP Request configuration
+- Pagination handling
+- Data merging
+- Filtering
+- Conditional routing
+- Batch processing
+- Error handling
+- Retry logic
+
+
 ## Workflow Architecture
 
 Main flow:
@@ -64,29 +107,11 @@ Finalization:
 - Expressions
 - Workflow execution flow
 
-## Screenshots
-
-### 1. Workflow overview
-
-![Workflow overview](screenshots/01-workflow-overview.png)
-
-### 2. Pagination configuration
-
-![Pagination configuration](screenshots/02-pagination-configuration.png)
-
-### 3. Retry and error handling
-
-![Retry and error handling](screenshots/03-retry-error-handling.png)
-
-### 4. Successful pipeline finalization
-
-![Finalize pipeline success](screenshots/04-finalize-pipeline-success.png)
-
 ## Workflow File
 
 The exportable workflow is available here:
 
-`workflow/api-integration-pipeline-public.json`
+`api-integration-pipeline-public.json`
 
 For security, account-specific credential references and assessment identifiers were removed from the public JSON.
 
@@ -96,7 +121,7 @@ When importing the workflow into n8n, configure your own credentials and replace
 
 ## Importing into n8n
 
-1. Download `workflow/api-integration-pipeline-public.json`.
+1. Download `api-integration-pipeline-public.json`.
 2. Open n8n.
 3. Create or open a workflow.
 4. Choose **Import from File**.
@@ -135,8 +160,7 @@ Configuration:
 ```text
 n8n-api-integration-pipeline/
 ├── README.md
-├── workflow/
-│   └── api-integration-pipeline-public.json
+├── api-integration-pipeline-public.json
 └── screenshots/
     ├── 01-workflow-overview.png
     ├── 02-pagination-configuration.png
